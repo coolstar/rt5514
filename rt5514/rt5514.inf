@@ -1,0 +1,70 @@
+;/*++
+;
+;Copyright (c) CoolStar.  All rights reserved.
+;
+;Module Name:
+;    rt5514.inf
+;
+;Abstract:
+;    INF file for installing the Realtek ALC5514 I2S Amplifier Driver 
+;
+;
+;--*/
+
+[Version]
+Signature   = "$WINDOWS NT$"
+Class       = Media
+ClassGuid   = {4d36e96c-e325-11ce-bfc1-08002be10318}
+Provider    = CoolStar
+DriverVer   = 12/21/2022,1.0.0
+CatalogFile = rt5514.cat
+PnpLockdown=1
+
+[DestinationDirs]
+DefaultDestDir = 12
+
+; ================= Class section =====================
+
+[SourceDisksNames]
+1 = %DiskId1%,,,""
+
+[SourceDisksFiles]
+rt5514.sys  = 1,,
+
+;*****************************************
+; rt5514  Install Section
+;*****************************************
+
+[Manufacturer]
+%StdMfg%=Standard,NTAMD64
+
+; Decorated model section take precedence over undecorated 
+; ones on XP and later.
+[Standard.NTAMD64]
+%rt5514.DeviceDesc%=Rt5514_Device, ACPI\10EC5514
+
+[Rt5514_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+rt5514.sys
+
+;-------------- Service installation
+[Rt5514_Device.NT.Services]
+AddService = rt5514,%SPSVCINST_ASSOCSERVICE%, Rt5514_Service_Inst
+
+; -------------- rt5514 driver install sections
+[Rt5514_Service_Inst]
+DisplayName    = %rt5514.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START 
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\rt5514.sys
+LoadOrderGroup = Base
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+StdMfg                 = "CoolStar"
+DiskId1                = "Realtek 5514 Installation Disk #1"
+rt5514.DeviceDesc = "Realtek ALC5514 I2S Microphone"
+rt5514.SVCDESC    = "Realtek 5514 Service"
