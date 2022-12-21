@@ -217,7 +217,7 @@ NTSTATUS
 StopCodec(
 	PRT5514_CONTEXT pDevice
 ) {
-	NTSTATUS status;
+	NTSTATUS status = STATUS_SUCCESS;
 
 	pDevice->DevicePoweredOn = FALSE;
 	return status;
